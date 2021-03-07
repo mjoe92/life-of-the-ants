@@ -1,0 +1,84 @@
+@startuml
+
+class Simulator {
+    +main(): void
+    ~onKeyPressed(): void
+}
+
+class Colony {
+    -width: int
+    -queen: Queen
+    -ants: Map<Ant, int>
+    +generateAnts(nOfWorkers: int, nOfSoldiers: int, nOfDrones: int): void
+    +update(): void
+    +display(): void
+}
+
+abstract class Ant {
+    -tile: char
+    -position: Position
+    -canMove: boolean
+    +move()
+    +getCanMove()
+    +getPosition()
+}
+
+Colony *-- Ant
+Simulator *-- Colony
+
+class Position {
+    -x: int
+    -y: int
+    +getX()
+    +getY()
+}
+
+Ant *-- Position
+
+class Queen implements Ant {
+    -tile: char
+    -canMove: boolean
+    -{static} counterForMating: int
+    +getTile()
+    +countDown(): void
+    +restartCounter(): void
+}
+
+Colony *-- Queen
+
+class Worker implements Ant {
+    -tile: char
+    +getTile()
+    +move(): void
+}
+
+class Drone implements Ant {
+    -{static} counterForStaying: int
+    -tile: char
+    +getTile()
+    +move(): void
+}
+
+class Soldier implements Ant {
+    -tile: char
+    +getTile()
+    +move(): void
+}
+
+enum Direction {
+    NORTH, EAST, SOUTH, WEST
+    -deltaPosition: Position
+    +getDeltaPosition()
+}
+
+Ant -- Direction
+
+enum AntTile {
+    QUEEN, DRONE, SOLDIER, WORKER
+    -tile: char
+    +getTile()
+}
+
+Ant -- AntTile
+
+@enduml
