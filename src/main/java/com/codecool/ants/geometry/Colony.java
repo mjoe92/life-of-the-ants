@@ -20,8 +20,9 @@ public class Colony {
     public Colony(int width) {
         this.width = width;
         this.map = new char[width][width];
+            fillMapWithChar(freePlace);
         this.queen = new Queen();
-        antList.add(new Queen());
+            antList.add(new Queen());
     }
 
     public void generateAnts(Integer...nOfAnts) {
@@ -44,6 +45,7 @@ public class Colony {
                 antList.add(new Drone());
             }
         }
+        placeAntsAutomatic();
     }
 
     public void generateAnts() {
@@ -52,6 +54,18 @@ public class Colony {
         nOfDrones = random.nextInt(limit);
         nOfSoldiers = random.nextInt(limit);
         generateAnts(nOfWorkers, nOfDrones, nOfSoldiers);
+    }
+
+    private void placeAntsAutomatic() {
+        for (Ant ant : antList) {
+            Position freePos;
+            do {
+                int horizontalPos = random.nextInt(width - 1) + 1 - width / 2;
+                int verticalPos = random.nextInt(width - 1) + 1 - width / 2;
+                freePos = new Position(horizontalPos, verticalPos);
+            } while (!isFreeInsideMap(freePos));
+            ant.setPosition(freePos);
+        }
     }
 
     public void emptyAntList() {
@@ -98,13 +112,13 @@ public class Colony {
         if (Math.abs(actualPos.x) > width / 2 || Math.abs(actualPos.y) > width / 2) {
             return false;
         }
-        return map[actualPos.y][actualPos.x] == freePlace;
+        return map[actualPos.y + width / 2][actualPos.x + width / 2] == freePlace;
     }
 
     private void refreshMap() {
-        Arrays.fill(map, freePlace);
+        fillMapWithChar(freePlace);
         for (Ant ant : antList) {
-            map[ant.getPosition().x][ant.getPosition().y] = ant.getTile();
+            map[ant.getPosition().x + width / 2][ant.getPosition().y + width / 2] = ant.getTile();
         }
     }
 
@@ -118,5 +132,11 @@ public class Colony {
             sb.append("|").append(System.lineSeparator());
         }
         System.out.println(sb);
+    }
+
+    private void fillMapWithChar(char thing) {
+        for (char[] row : map) {
+            Arrays.fill(row, thing);
+        }
     }
 }

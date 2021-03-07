@@ -51,4 +51,14 @@ public class Soldier extends Ant  {
         ++pointer;
         if (pointer > 3) pointer = 0;
     }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        if (position != null) {
+            this.position = position;
+        }
+    }
 }

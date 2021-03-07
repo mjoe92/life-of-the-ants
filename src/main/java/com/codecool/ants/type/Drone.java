@@ -61,4 +61,14 @@ public class Drone extends Ant  {
     public int getCounter() {
         return counter;
     }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        if (position != null) {
+            this.position = position;
+        }
+    }
 }

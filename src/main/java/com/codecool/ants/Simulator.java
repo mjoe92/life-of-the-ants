@@ -1,9 +1,6 @@
 package com.codecool.ants;
 
 import com.codecool.ants.geometry.Colony;
-import com.codecool.ants.type.Drone;
-import com.codecool.ants.type.Soldier;
-import com.codecool.ants.type.Worker;
 
 import java.util.Scanner;
 

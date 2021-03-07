@@ -12,16 +12,16 @@ public abstract class Ant {
         this.tile = antTile.getTile();
     }
 
-    public Position getPosition() {
-        return position;
-    }
-
     public boolean isCanMove() {
         return canMove;
     }
 
     public char getTile() {
         return tile;
+    }
+
+    public Position getPosition() {
+        return position;
     }
 
     public void setPosition(Position position) {
