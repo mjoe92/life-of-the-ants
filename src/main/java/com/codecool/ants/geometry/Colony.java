@@ -18,11 +18,11 @@ public class Colony {
     private static Random random = new Random();
 
     public Colony(int width) {
-        this.width = width;
-        this.map = new char[width][width];
+        this.width = width + 1;
+        this.map = new char[this.width][this.width];
             fillMapWithChar(freePlace);
         this.queen = new Queen();
-            antList.add(new Queen());
+            antList.add(queen);
     }
 
     public void generateAnts(Integer...nOfAnts) {
@@ -50,9 +50,9 @@ public class Colony {
 
     public void generateAnts() {
         int limit = (int) Math.sqrt(width);
-        nOfWorkers = random.nextInt(limit);
-        nOfDrones = random.nextInt(limit);
-        nOfSoldiers = random.nextInt(limit);
+        nOfWorkers = random.nextInt(limit) + 1;
+        nOfDrones = random.nextInt(limit) + 1;
+        nOfSoldiers = random.nextInt(limit) + 1;
         generateAnts(nOfWorkers, nOfDrones, nOfSoldiers);
     }
 
@@ -68,34 +68,34 @@ public class Colony {
         }
     }
 
-    public void emptyAntList() {
-        antList.clear();
-    }
-
-    public List<Ant> getAnts(Ant ant) {
-        return antList;
-    }
-
     public void update() {
         for (Ant ant : antList) {
             Position nextPos = ant.getPosition();
             if (ant instanceof Queen) {
-                ((Queen) ant).reduceCounter();
+                queen.reduceCounter();
+                System.out.println(queen.getCounter());
             } else if (ant instanceof Worker) {
-                nextPos = ((Worker) ant).move();
+                nextPos = ((Worker) ant).onUpdate();
             } else if (ant instanceof Soldier) {
-                nextPos = ((Soldier) ant).move();
+                nextPos = ((Soldier) ant).onUpdate();
             } else if (ant instanceof Drone) {
-                if (((Drone) ant).getCounter() == 0) {
-                    nextPos = ((Drone) ant).move();
-                    if (nextPos == queen.getPosition()) {
+                Drone drone = (Drone) ant;
+                System.out.println(drone.getCounter());
+                if (drone.getCounter() == 0) {
+                    nextPos = drone.onUpdate();
+                    if (nextPos.x == queen.getPosition().x && nextPos.y == queen.getPosition().y) {
                         if (queen.getCounter() == 0) {
-                            ((Drone) ant).restartCounter();
+                            drone.restartCounter();
+                            queen.restartCounter();
+                            System.out.println("HALLELUJAH");
+                        } else if (drone.getCounter() == 0){
+                            nextPos = drone.kickedToBorder(width);
+                            System.out.println(":(");
                         }
-                        nextPos = ((Drone) ant).jumpToBorder(width);
                     }
                 } else {
-                    ((Drone) ant).reduceCounter();
+                    drone.reduceCounter();
+                    if (drone.getCounter() == 0) drone.kickedToBorder(width);
                 }
             }
             if (isFreeInsideMap(nextPos)) {
@@ -118,7 +118,9 @@ public class Colony {
     private void refreshMap() {
         fillMapWithChar(freePlace);
         for (Ant ant : antList) {
-            map[ant.getPosition().x + width / 2][ant.getPosition().y + width / 2] = ant.getTile();
+            int displayX = ant.getPosition().x + width / 2;
+            int displayY = ant.getPosition().y + width / 2;
+            map[displayY][displayX] = ant.getTile();
         }
     }
 

@@ -1,12 +1,12 @@
 package com.codecool.ants.type;
 
 public enum AntTile {
-    QUEEN ('q'),
-    DRONE ('d'),
-    SOLDIER ('s'),
-    WORKER ('w');
+    QUEEN ('Q'),
+    DRONE ('D'),
+    SOLDIER ('S'),
+    WORKER ('W');
 
-    private char tile;
+    private final char tile;
 
     AntTile(char tile) {
         this.tile = tile;

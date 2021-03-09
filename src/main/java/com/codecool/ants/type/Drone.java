@@ -6,29 +6,29 @@ import java.util.Random;
 
 import static com.codecool.ants.geometry.Direction.*;
 
-public class Drone extends Ant  {
+public class Drone implements Ant  {
 
-    private final char tile = AntTile.DRONE.getTile();
+    private final char tile;
     private Position position;
-    private boolean canMove = true;
     private int counter;
 
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
     public Drone() {
-        super(AntTile.DRONE);
+        tile = AntTile.DRONE.getTile();
     }
 
-    public Position move() {
+    public Position onUpdate() {
 
         int newX = position.x;
         int newY = position.y;
-        float angle = (float) Math.toDegrees(Math.atan2(newY, newX));
-        if (angle > 45) {
+        float angle = Math.abs((float) Math.toDegrees(Math.atan2(newY, newX)));
+        if (newY < 0) angle = 360 - angle;
+        if (135 >= angle && angle > 45) {
             newY += SOUTH.getDeltaPosition().y;
-        } else if (angle > 135) {
+        } else if (225 >= angle && angle > 135) {
             newX += EAST.getDeltaPosition().x;
-        } else if (angle > 225) {
+        } else if (315 >= angle && angle > 225) {
             newY += NORTH.getDeltaPosition().y;
         } else {
             newX += WEST.getDeltaPosition().x;
@@ -45,7 +45,7 @@ public class Drone extends Ant  {
         if (counter > 0) counter--;
     }
 
-    public Position jumpToBorder(int colonySize) {
+    public Position kickedToBorder(int colonySize) {
         int randomBorderPos = random.nextInt(colonySize) - colonySize / 2;
         int[][] border = {
                 {colonySize / 2, randomBorderPos},
@@ -62,13 +62,20 @@ public class Drone extends Ant  {
         return counter;
     }
 
+    @Override
     public Position getPosition() {
         return position;
     }
 
+    @Override
     public void setPosition(Position position) {
         if (position != null) {
             this.position = position;
         }
+    }
+
+    @Override
+    public char getTile() {
+        return tile;
     }
 }

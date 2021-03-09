@@ -9,13 +9,12 @@ import java.util.Random;
 
 import static com.codecool.ants.geometry.Direction.*;
 
-public class Soldier extends Ant  {
+public class Soldier implements Ant  {
 
-    private final char tile = AntTile.SOLDIER.getTile();
+    private final char tile;
     private Position position;
-    private final boolean canMove = true;
 
-    private static int pointer = 0;
+    private int pointer = 0;
     private final List<Direction> plan = generateRoot();
     private final static Direction[][] root = {
             {NORTH, EAST, SOUTH, WEST},
@@ -23,10 +22,10 @@ public class Soldier extends Ant  {
     };
 
     public Soldier() {
-        super(AntTile.SOLDIER);
+        tile = AntTile.SOLDIER.getTile();
     }
 
-    public Position move() {
+    public Position onUpdate() {
         int newX = position.x + plan.get(pointer).getDeltaPosition().x;
         int newY = position.y + plan.get(pointer).getDeltaPosition().y;
         nextPointer();
@@ -52,13 +51,20 @@ public class Soldier extends Ant  {
         if (pointer > 3) pointer = 0;
     }
 
+    @Override
     public Position getPosition() {
         return position;
     }
 
+    @Override
     public void setPosition(Position position) {
         if (position != null) {
             this.position = position;
         }
+    }
+
+    @Override
+    public char getTile() {
+        return tile;
     }
 }

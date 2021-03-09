@@ -6,7 +6,7 @@ package com.codecool.ants.geometry;
         SOUTH (new Position(0, -1)),
         WEST (new Position(-1, 0));
 
-        private Position deltaPosition;
+        private final Position deltaPosition;
 
         Direction(Position deltaPosition) {
             this.deltaPosition = deltaPosition;

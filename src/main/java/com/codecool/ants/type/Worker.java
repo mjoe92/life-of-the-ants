@@ -5,20 +5,21 @@ import com.codecool.ants.geometry.Position;
 
 import java.util.Random;
 
-public class Worker extends Ant {
+public class Worker implements Ant {
 
-    private final char tile = AntTile.WORKER.getTile();
+    private final char tile;
     private Position position;
-    private final boolean canMove = true;
 
     public Worker() {
-        super(AntTile.WORKER);
+        tile = AntTile.WORKER.getTile();
     }
 
-    public Position move() {
+    public Position onUpdate() {
         int randomPick = new Random().nextInt(4);
         Direction direction = Direction.values()[randomPick];
-        return direction.getDeltaPosition();
+        int newX = position.x + direction.getDeltaPosition().x;
+        int newY = position.y + direction.getDeltaPosition().y;
+        return new Position(newX, newY);
     }
 
     public Position getPosition() {
@@ -29,5 +30,9 @@ public class Worker extends Ant {
         if (position != null) {
             this.position = position;
         }
+    }
+
+    public char getTile() {
+        return tile;
     }
 }

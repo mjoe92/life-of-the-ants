@@ -1,0 +1,101 @@
+@startuml
+
+class Simulator {
+    +main(): void
+    ~onKeyPressed(): void
+}
+
+class Colony {
+    -width: int
+    -freePlace: char
+    -map: char[][]
+    -queen: Queen
+    -antList: List<Ant>
+    -nOfWorkers, nOfSoldiers, nOfDrones: int
+    +generateAnts(Integer...): void
+    +generateAnts(): void
+    -placeAntsAutomatic(): void
+    +update(): void
+    -isFreeInsideMap(Position): boolean
+    -refreshMap(): void
+    +display(): void
+    -fillMapWithChar(char): void
+}
+
+interface Ant {
+    getPosition: Position
+    setPosition
+    getTile: char
+}
+
+Colony *-- Ant
+Simulator *-- Colony
+
+class Position {
+    +x: int
+    +y: int
+}
+
+Ant *-- Position
+
+class Queen implements Ant {
+    -tile: char
+    -position: Position
+    -counter: int
+    +restartCounter(): void
+    +reduceCounter(): void
+    +getCounter(): int
+    +getTile(), getPosition(), setPosition(Position)
+}
+
+Colony *-- Queen
+
+class Worker implements Ant {
+    -tile: char
+    -position: Position
+    +onUpdate(): Position
+    +getTile(), getPosition(), setPosition(Position)
+}
+
+class Drone implements Ant {
+    -tile: char
+    -position: Position
+    -counter: int
+    -{static} random: Random
+    +onUpdate(): Position
+    +restartCounter(): void
+    +reduceCounter(): void
+    +kickedToBorder(int): Position
+    +getCounter(): int
+    +getTile(), getPosition(), setPosition(Position)
+}
+
+class Soldier implements Ant {
+    -tile: char
+    -position: Position
+    -pointer: int
+    -plan: List<Direction>
+    -{static} root: Direction[][]
+    +onUpdate(): Position
+    -generateRoot(): List<Direction>
+    -nextPointer(): void
+    +getTile(), getPosition(), setPosition(Position)
+}
+
+enum Direction {
+    NORTH, EAST, SOUTH, WEST
+    -deltaPosition: Position
+    +getDeltaPosition()
+}
+
+Ant -- Direction
+
+enum AntTile {
+    QUEEN, DRONE, SOLDIER, WORKER
+    -tile: char
+    +getTile()
+}
+
+Ant -- AntTile
+
+@enduml
