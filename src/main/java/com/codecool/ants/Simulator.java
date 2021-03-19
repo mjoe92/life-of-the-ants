@@ -23,6 +23,4 @@ public class Simulator {
             colony.update();
         }
     }
-
-
 }

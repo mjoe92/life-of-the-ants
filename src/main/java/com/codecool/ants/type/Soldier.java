@@ -48,7 +48,7 @@ public class Soldier implements Ant  {
 
     private void nextPointer() {
         ++pointer;
-        if (pointer > 3) pointer = 0;
+        if (pointer > root[0].length - 1) pointer = 0;
     }
 
     @Override

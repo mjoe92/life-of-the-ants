@@ -69,18 +69,19 @@ public class Colony {
     }
 
     public void update() {
+        int number = 0;
         for (Ant ant : antList) {
             Position nextPos = ant.getPosition();
             if (ant instanceof Queen) {
                 queen.reduceCounter();
-                System.out.println(queen.getCounter());
+                System.out.println("Queen: " + queen.getCounter());
             } else if (ant instanceof Worker) {
                 nextPos = ((Worker) ant).onUpdate();
             } else if (ant instanceof Soldier) {
                 nextPos = ((Soldier) ant).onUpdate();
             } else if (ant instanceof Drone) {
                 Drone drone = (Drone) ant;
-                System.out.println(drone.getCounter());
+                System.out.println("Drone (#" + ++number + "): " + drone.getCounter());
                 if (drone.getCounter() == 0) {
                     nextPos = drone.onUpdate();
                     if (nextPos.x == queen.getPosition().x && nextPos.y == queen.getPosition().y) {
